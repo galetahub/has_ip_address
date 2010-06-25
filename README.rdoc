@@ -20,10 +20,13 @@ Here's an example of using it:
     => "127.0.0.1"
 
 This assumes you are using a column named :ip_address. To change this behavior, pass in a parameter with the column you care to use:
+Migration:
+    t.integer :visit_ip, :limit => 8
+    t.integer :current_ip, :limit => 8
 
-
+Model:
     class Visit < ActiveRecord::Base
-      has_ip_address :visit_ip
+      has_ip_address :visit_ip, :current_ip
     end
 
 == Known issues

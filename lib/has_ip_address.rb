@@ -9,18 +9,22 @@ module HasIpAddress
   end
 
   module ClassMethods
-    def has_ip_address(column = :ip_address)
-      define_method "#{column}=" do |address|
-        ipaddr = address.to_ipaddr
-        write_attribute column, ipaddr
+    def has_ip_address(*columns)
+      columns ||= :ip_address
+      
+      [columns].flatten.each do |column|
+        define_method "#{column}=" do |address|
+          ipaddr = address.to_ipaddr
+          write_attribute column, ipaddr
 
-        ipaddr
-      end
+          ipaddr
+        end
 
-      define_method column do
-        integer = read_attribute column
-        if integer.present?
-          IPAddr.new(Utils::i_to_ipaddr(integer))
+        define_method column do
+          integer = read_attribute column
+          if integer.present?
+            IPAddr.new(Utils::i_to_ipaddr(integer))
+          end
         end
       end
     end
