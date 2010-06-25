@@ -2,11 +2,10 @@ require 'ipaddr'
 require 'has_ip_address/extensions'
 
 module HasIpAddress
-
-  def self.included(other)
-    other.class_eval do
-      extend ClassMethods
-    end
+  autoload :Utils, 'has_ip_address/utils'
+  
+  def self.included(base)
+    base.send :extend, ClassMethods
   end
 
   module ClassMethods
@@ -21,20 +20,11 @@ module HasIpAddress
       define_method column do
         integer = read_attribute column
         if integer.present?
-          IPAddr.new(i_to_ipaddr(integer))
+          IPAddr.new(Utils::i_to_ipaddr(integer))
         end
       end
-
-      unless self.instance_methods.include?('i_to_ipaddr')
-        define_method :i_to_ipaddr do |i|
-          [24, 16, 8, 0].collect {|b| (i >> b) & 255}.join('.')
-        end
-      end      
     end
   end
 end
 
-require 'active_record'
-ActiveRecord::Base.class_eval do
-  include HasIpAddress
-end
+require 'has_ip_address/railtie' if defined?(Rails)
