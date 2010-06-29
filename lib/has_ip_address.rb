@@ -14,7 +14,7 @@ module HasIpAddress
       
       [columns].flatten.each do |column|
         define_method "#{column}=" do |address|
-          ipaddr = address.to_ipaddr
+          ipaddr = address.blank? ? nil : address.to_ipaddr
           write_attribute column, ipaddr
 
           ipaddr
