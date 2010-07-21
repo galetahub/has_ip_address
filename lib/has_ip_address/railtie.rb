@@ -5,7 +5,7 @@ module HasIpAddress
   if defined? Rails::Railtie
     require 'rails'
     class Railtie < Rails::Railtie
-      config.after_initialize do
+      config.before_initialize do
         ActiveSupport.on_load :active_record do
           ActiveRecord::Base.send :include, HasIpAddress
         end
