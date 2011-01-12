@@ -15,7 +15,7 @@ module HasIpAddress
       [columns].flatten.each do |column|
         define_method "#{column}=" do |address|
           ipaddr = address.blank? ? nil : address.to_ipaddr
-          write_attribute column, ipaddr
+          write_attribute(column, ipaddr.to_i)
 
           ipaddr
         end
@@ -31,4 +31,4 @@ module HasIpAddress
   end
 end
 
-require 'has_ip_address/railtie' if defined?(Rails)
+require 'has_ip_address/railtie'
